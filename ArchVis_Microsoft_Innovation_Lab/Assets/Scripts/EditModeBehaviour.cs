@@ -15,7 +15,7 @@ public class EditModeBehaviour : MonoBehaviour, ArchVisPlayerBehaviour {
     private float rotX = 0.0f; // rotation around the right/x axis
     private float mouseSensitivity = Player.mouseSensitivity;
     private float clampAngle = Player.clampAngle;
-    private float clapmAngleTop = 0.0f;
+    private float clapmAngleTop = -30.0f;
     private Camera edCamera;
     private Texture2D crosshairImage;
     private Texture2D selectedCrosshairImage;
@@ -29,14 +29,13 @@ public class EditModeBehaviour : MonoBehaviour, ArchVisPlayerBehaviour {
         Vector3 moveDirection = Vector3.zero;
         moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
         moveDirection *= walkSpeed * Time.deltaTime;
-
         //Mouse Look
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = -Input.GetAxis("Mouse Y");
         rotY += mouseX * mouseSensitivity * Time.deltaTime;
         rotX += mouseY * mouseSensitivity * Time.deltaTime;
         rotX = Mathf.Clamp(rotX, clapmAngleTop, clampAngle);
-        Quaternion localRotation = Quaternion.Euler(rotX, rotY, 0.0f);
+        Quaternion localRotation = Quaternion.Euler(rotX + 35.0f, rotY, 0.0f);
         Quaternion yaw = Quaternion.Euler(0.0f, rotY, 0.0f);
 
         player.transform.Translate(moveDirection);
@@ -49,8 +48,8 @@ public class EditModeBehaviour : MonoBehaviour, ArchVisPlayerBehaviour {
         crosshairImage = GameManager.getInstance().editModeCrosshair;
         selectedCrosshairImage = GameManager.getInstance().editModeSelectedCrosshair;
         currentCrosshair = crosshairImage;
-        edCamera = Player.playerCamera;           
-        transform.position = new Vector3(transform.position.x, eyeHeight, transform.position.z);    //Move to player height
+        edCamera = Player.playerCamera;
+        StartCoroutine(MoveToStartCoroutine(new Vector3(transform.position.x, eyeHeight, transform.position.z)));    //Move to player height
         Vector3 rot = transform.localRotation.eulerAngles;
         rotY = rot.y;
         rotX = rot.x;
@@ -71,6 +70,15 @@ public class EditModeBehaviour : MonoBehaviour, ArchVisPlayerBehaviour {
                 }                
             }
         }
+    }
+
+    IEnumerator MoveToStartCoroutine(Vector3 targetPosition) {
+        float timeToStart = Time.time;
+        while (Vector3.Distance(transform.position, targetPosition) > 0.05f) {
+            transform.position = Vector3.Lerp(transform.position, targetPosition, (Time.time - timeToStart) * 1); //Here speed is the 1 or any number which decides the how fast it reach to one to other end.
+            yield return null;
+        }
+        yield return new WaitForSeconds(3f); // THis is just for how Coroutine works with delay
     }
 
     void OnGUI() {
@@ -95,5 +103,9 @@ public class EditModeBehaviour : MonoBehaviour, ArchVisPlayerBehaviour {
             hObject.GetComponent<Renderer>().material = highLightedObjects[hObject];
             highLightedObjects.Remove(hObject);
         }
+    }
+
+    private void OnDestroy() {
+        unhighLightAllObjects();
     }
 }

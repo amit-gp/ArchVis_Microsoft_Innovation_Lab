@@ -42,13 +42,22 @@ public class FPSBehaviour : MonoBehaviour, ArchVisPlayerBehaviour
 
     void Start () {
         fpsCamera = Player.playerCamera;
-        transform.position = new Vector3(transform.position.x, eyeHeight, transform.position.z);    //Move to player height
+        StartCoroutine(MoveToStartCoroutine(new Vector3(transform.position.x, eyeHeight, transform.position.z)));    //Move to player height
         Vector3 rot = transform.localRotation.eulerAngles;
         rotY = rot.y;
         rotX = rot.x;
     }
 
-	void Update () {
+    IEnumerator MoveToStartCoroutine(Vector3 targetPosition) {
+        float timeToStart = Time.time;
+        while (Vector3.Distance(transform.position, targetPosition) > 0.05f) {
+            transform.position = Vector3.Lerp(transform.position, targetPosition, (Time.time - timeToStart) * 1); //Here speed is the 1 or any number which decides the how fast it reach to one to other end.
+            yield return null;
+        }
+        yield return new WaitForSeconds(3f); // THis is just for how Coroutine works with delay
+    }
+
+    void Update () {
 		
 	}
 }
