@@ -9,5 +9,5 @@ using UnityEngine;
 
 public interface ArchVisPlayerBehaviour {
 
-    void Move(GameObject player, Camera camera, Vector3 movement, Quaternion lookRotation, Quaternion yaw);
+    void Move(GameObject player);
 }

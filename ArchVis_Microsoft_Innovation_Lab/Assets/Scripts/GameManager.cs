@@ -10,34 +10,37 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     #region Variables
-    public static Camera[] cameras;
     private static Player player;
-    private static GameManager gameManagerInstance = new GameManager();
-    private static readonly Object key = new Object();
+    private static GameManager gameManagerInstance;
+
+    [Header("GUI Elements")]
+    public Texture2D editModeCrosshair;
+    public Texture2D editModeSelectedCrosshair;
+    public Material highLightedMaterial;
     #endregion
 
     private GameManager() { }
 
-    public static GameManager getInstance() {
-
-        if (gameManagerInstance == null) {
-            lock (key) {
-                if (gameManagerInstance == null) {
-                    gameManagerInstance = new GameManager();
-                }
-            }            
+    private void Awake() {
+        
+        if(gameManagerInstance == null) {
+            gameManagerInstance = this;
+        } else if(gameManagerInstance != this) {
+            Destroy(gameObject);
         }
+        DontDestroyOnLoad(gameObject);
+    }
+
+    public static GameManager getInstance() {
+        
         return gameManagerInstance;
     }
 
     private void Start() {
 
-        cameras = Camera.allCameras;
-
     }
 
-    private void Update() {
-        
+    private void Update() {        
 
     }
 }
