@@ -7,7 +7,7 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: Outlined_Material
-  m_Shader: {fileID: 4800000, guid: f0c1688758fa70b49ae79c648ddc1e7d, type: 3}
+  m_Shader: {fileID: 4800000, guid: 200419cdf0e0f87499a2da44b21f4d29, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -64,7 +64,8 @@ Material:
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
-    - _OutlineWidth: 0.129
+    - _Outline: 2.78
+    - _OutlineWidth: 0.01
     - _OutlinedsWidth: 1.1
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
